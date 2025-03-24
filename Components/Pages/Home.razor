@@ -11,7 +11,8 @@
 		</Columns>
 	</Grid>
 }
-<Button OnClick="OnSetData">Set new random Data</Button>
+<Button OnClick="OnSetData20">Set new 20 rows</Button>
+<Button OnClick="OnSetData15">Set new 15 rows</Button>
 <Button OnClick="OnSortGrid">Sort Grid</Button>
 <Button OnClick="OnClearSorting">Clear Sorting</Button>
 
@@ -21,7 +22,6 @@
 
 	private Grid? Grid { get; set; }
 	private List<RandomData>? DataSource { get; set; } = null;
-	private int Rows { get; set; } = 20;
 
 	class RandomData
 	{
@@ -31,12 +31,17 @@
 
 	protected override void OnInitialized()
 	{
-		OnSetData();
+		OnSetData20();
 	}
 
-	private void OnSetData()
+	private void OnSetData20()
 	{
-		DataSource = GenerateData();
+		DataSource = GenerateData(20);
+	}
+
+	private void OnSetData15()
+	{
+		DataSource = GenerateData(15);
 	}
 
 	private void OnSortGrid()
@@ -57,12 +62,13 @@
 		}
 	}
 
-	private List<RandomData> GenerateData()
+	private List<RandomData> GenerateData(int nRows)
 	{
 		List<RandomData> resultList = new List<RandomData>();
 		Random rnd = new Random();
 
-		for (int i = 0; i < Rows; i++){
+		for (int i = 0; i < nRows; i++)
+		{
 			resultList.Add(new RandomData()
 			{
 				RandomString = Guid.NewGuid().ToString(),
