@@ -1,0 +1,74 @@
+﻿@page "/"
+
+<PageTitle>This is an example for the Grid Bug</PageTitle>
+
+@if (DataSource != null)
+{
+	<Grid @ref="Grid" Sorting="@sorting" Filtering="@filtering" DataSource="DataSource">
+		<Columns>
+			<Column DataField="RandomString" Label="Random String"></Column>
+			<Column DataField="RandomNumber" Label="Random Number" DataType="number" Align="HorizontalAlignment.Right" CellsAlign="HorizontalAlignment.Right" Width="250"></Column>
+		</Columns>
+	</Grid>
+}
+<Button OnClick="OnSetData">Set new random Data</Button>
+<Button OnClick="OnSortGrid">Sort Grid</Button>
+<Button OnClick="OnClearSorting">Clear Sorting</Button>
+
+@code {
+	GridSorting sorting = new GridSorting() { Enabled = true, Mode = GridSortingMode.Many };
+	GridFiltering filtering = new GridFiltering() { Enabled = true };
+
+	private Grid? Grid { get; set; }
+	private List<RandomData>? DataSource { get; set; } = null;
+	private int Rows { get; set; } = 20;
+
+	class RandomData
+	{
+		public string RandomString { get; set; } = default!;
+		public int RandomNumber { get; set; }
+	}
+
+	protected override void OnInitialized()
+	{
+		OnSetData();
+	}
+
+	private void OnSetData()
+	{
+		DataSource = GenerateData();
+	}
+
+	private void OnSortGrid()
+	{
+		if (Grid != null)
+		{
+			Grid.ClearSort();
+			Grid.AddSort(nameof(RandomData.RandomString), "asc");
+			Grid.AddSort(nameof(RandomData.RandomNumber), "asc");
+		}
+	}
+
+	private void OnClearSorting()
+	{
+		if (Grid != null)
+		{
+			Grid.ClearSort();
+		}
+	}
+
+	private List<RandomData> GenerateData()
+	{
+		List<RandomData> resultList = new List<RandomData>();
+		Random rnd = new Random();
+
+		for (int i = 0; i < Rows; i++){
+			resultList.Add(new RandomData()
+			{
+				RandomString = Guid.NewGuid().ToString(),
+				RandomNumber = rnd.Next(1, 9999)
+			});
+		}
+		return resultList;
+	}
+}
